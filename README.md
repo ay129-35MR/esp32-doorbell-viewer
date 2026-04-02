@@ -377,8 +377,3 @@
 
   That combination turned into a very practical little doorbell/camera node.
 
-
-  If you want, I can also turn this into:
-  1. a cleaner `README.md` ready to paste directly into a repo
-  2. a shorter GitHub Discussion post
-  3. a matching `LICENSE` file and `README` pair with consistent headings and tone
