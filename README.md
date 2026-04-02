@@ -9,6 +9,8 @@
 
 ## Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
 
+
+
 ## TL;DR
 
 This project is a small desktop doorbell camera viewer built from:
