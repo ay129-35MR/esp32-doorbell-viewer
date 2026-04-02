@@ -4,7 +4,7 @@
 
   ## TL;DR
 
-  This project is a small wall-mounted doorbell/camera node built from:
+  This project is a small desktop doorbell camera viewer built from:
 
   - an **ESP32-S3 SuperMini**
   - a separate **display + rotary encoder assembly** from AliExpress
