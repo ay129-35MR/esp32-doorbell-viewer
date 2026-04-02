@@ -151,7 +151,8 @@
   ```yaml
   psram:
     mode: quad
-    speed: 40MHz
+    speed: 40MHz ...
+  ---
 
   That helps in a few places:
 
@@ -187,7 +188,7 @@
   - crop them to fit the display
   - convert them into something display-friendly
 
-  …I offload that to a Linux server on the network.
+  I offload that to a Linux server on the network.
 
   The Linux server exposes stable endpoints like:
 
