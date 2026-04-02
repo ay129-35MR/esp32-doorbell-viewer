@@ -77,6 +77,21 @@ The layout is straightforward:
 
 That made it easy to prototype and swap parts without locking myself into a PCB layout too early.
 
+### Pinout
+
+  | Function | GPIO | Notes |
+  |---|---:|---|
+  | TFT Backlight PWM | GPIO5 | Controlled via ledc |
+  | TFT SPI Clock | GPIO12 | Shared display SPI bus |
+  | TFT SPI MOSI | GPIO13 | Shared display SPI bus |
+  | TFT CS | GPIO10 | ST7789 chip select |
+  | TFT DC | GPIO9 | Display data/command |
+  | TFT Reset | GPIO8 | Display reset |
+  | Rotary Encoder A | GPIO6 | INPUT_PULLUP |
+  | Rotary Encoder B | GPIO4 | INPUT_PULLUP |
+  | Navigation Button | GPIO2 | INPUT_PULLUP, inverted |
+  | Knob Push Button | GPIO7 | INPUT_PULLUP, inverted |
+
 ### Mechanical compromise
 The downside is that the cable routing and soldering are a bit ugly.
 
