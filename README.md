@@ -131,6 +131,8 @@ The server handles:
 - PNG conversion
 - stable URLs for the ESP
 
+See the implementation of the server at https://github.com/ay129-35MR/Waveshare-ESP32-S3-Touch-LCD-4-Home-Assistant-Display  which is based on the excellent work of @strange-v
+
 That leaves the ESP32-S3 to do the embedded-friendly part: fetch the image, render the UI, react to the encoder/buttons, and stay responsive.
 
 ### Why PSRAM matters
