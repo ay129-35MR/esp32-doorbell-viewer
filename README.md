@@ -7,14 +7,14 @@
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/ay129)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate?business=nyashachipanga%40yahoo.com&currency_code=GBP)
 
-## Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
+### Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
 ![Clock Mode](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7200.jpeg)
 ![Camera Mode](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7196.jpeg)
 ![build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7188.jpeg)
 ![Build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7189.jpeg)
 ![Family](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7190.jpeg)
 
-## TL;DR
+### TL;DR
 
 This project is a small desktop doorbell camera viewer built from:
 
@@ -37,7 +37,7 @@ The result is a compact little device that:
 - lets me switch cameras with a rotary encoder
 - uses PSRAM for breathing room and for remote screenshot/debugging tooling
 
-## Hardware
+### Hardware
 
 ### Main controller
 - **ESP32-S3 SuperMini**
@@ -90,7 +90,7 @@ This is easy enough to improve:
 
 So the current build is functional and solid electrically, but very much “prototype hardware that escaped into production.”
 
-## What the device does
+### What the device does
 
 The node has two main modes:
 
@@ -115,7 +115,7 @@ That page:
 - allows manual refresh
 - times out back to the clock page after inactivity
 
-## Home Assistant’s role
+### Home Assistant’s role
 
 Home Assistant is an important part of the design. It is not just “nice to have.”
 
@@ -140,7 +140,7 @@ So Home Assistant is effectively acting as the event/router layer that turns cam
 
 That is an important design choice: I’m not trying to make the ESP32-S3 do identity, object detection, or camera analytics locally. Home Assistant is the orchestrator.
 
-## Why this is not a “viewer” running on the screen module
+### Why this is not a “viewer” running on the screen module
 
 One thing worth being precise about: the project is not based on a self-contained “screen board” that already does everything.
 
@@ -154,7 +154,7 @@ The actual architecture is:
 
 The ESP32-S3 is the compute node here. The display assembly is just the human interface hardware.
 
-## Why PSRAM matters
+### Why PSRAM matters
 
 PSRAM is one of the reasons this works comfortably.
 
@@ -188,7 +188,7 @@ That workflow is much more pleasant when the S3 has PSRAM available.
 
 So PSRAM here is not marketing fluff. It is directly useful.
 
-## Why the Linux server exists
+### Why the Linux server exists
 
 A big design decision in this project was: do not make the ESP handle the camera pipeline.
 
@@ -220,7 +220,7 @@ Then the ESP just downloads exactly the image it needs.
 
 This is a much more practical split of responsibilities.
 
-## Why this architecture works well
+### Why this architecture works well
 
 This split has a few major advantages.
 
@@ -258,7 +258,7 @@ The ESP is then left to do the embedded-friendly part:
 
 That is a much better fit than trying to make the microcontroller become a full media endpoint.
 
-## User interaction
+### User interaction
 
 The physical interaction is intentionally simple.
 
@@ -279,7 +279,7 @@ Used to refresh the selected camera image.
 
 That gives the device a clean appliance-like behavior instead of turning it into a menu-heavy gadget.
 
-## Visual behavior
+### Visual behavior
 
 ### Idle mode
 
@@ -298,7 +298,7 @@ That gives the device a clean appliance-like behavior instead of turning it into
 
 It is intentionally minimal and readable.
 
-## The prototype hardware story
+### The prototype hardware story
 
 This is not a polished enclosure-first build.
 
@@ -324,7 +324,7 @@ before investing time in a proper PCB.
 
 The answer is yes, it’s useful, which means the ugly parts are now worth cleaning up in v2.
 
-## Version 2 ideas
+### Version 2 ideas
 
 The obvious next steps are:
 
@@ -337,7 +337,7 @@ The obvious next steps are:
 
 But the current prototype already proves the architecture.
 
-## Why this project has held up
+### Why this project has held up
 
 A lot of small ESP display projects are fun for a week and then stop being useful.
 
