@@ -1,339 +1,346 @@
- # ESP32-S3 Doorbell Viewer
-  ## Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
+# ESP32-S3 Doorbell Viewer
 
+[![ESPHome](https://img.shields.io/badge/ESPHome-2025-blue?logo=esphome)](https://esphome.io/)  
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Integration-41BDF5?logo=home-assistant)](https://www.home-assistant.io/)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
 
-  ## TL;DR
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/ay129)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate?business=nyashachipanga%40yahoo.com&currency_code=GBP)
 
-  This project is a small desktop doorbell camera viewer built from:
+## Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
 
-  - an **ESP32-S3 SuperMini**
-  - a separate **display + rotary encoder assembly** from AliExpress
-  - a **custom perfboard motherboard**
-  - **ESPHome**
-  - **Home Assistant**
-  - a **Linux server** that prepares camera snapshots for the ESP
+## TL;DR
 
-  The ESP32-S3 SuperMini is the brains, but **it does not have a screen**. The screen and encoder are a separate hardware module. I mounted both parts onto a simple
-  perfboard carrier with female 2.54mm headers so the display/encoder module plugs into one side and the SuperMini plugs into the reverse.
+This project is a small desktop doorbell camera viewer built from:
 
-  The result is a compact little device that:
+- an **ESP32-S3 SuperMini**
+- a separate **display + rotary encoder assembly** from AliExpress
+- a **custom perfboard motherboard**
+- **ESPHome**
+- **Home Assistant**
+- a **Linux server** that prepares camera snapshots for the ESP
 
-  - sits as a clock/status display when idle
-  - reacts to Home Assistant motion/person detection
-  - jumps into a camera page when activity is detected outside
-  - fetches front/back snapshots from a Linux server
-  - lets me switch cameras with a rotary encoder
-  - uses PSRAM for breathing room and for remote screenshot/debugging tooling
+The ESP32-S3 SuperMini is the brains, but **it does not have a screen**. The screen and encoder are a separate hardware module. I mounted both parts onto a simple
+perfboard carrier with female 2.54mm headers so the display/encoder module plugs into one side and the SuperMini plugs into the reverse.
 
-  ## Hardware
+The result is a compact little device that:
 
-  ### Main controller
-  - **ESP32-S3 SuperMini**
+- sits as a clock/status display when idle
+- reacts to Home Assistant motion/person detection
+- jumps into a camera page when activity is detected outside
+- fetches front/back snapshots from a Linux server
+- lets me switch cameras with a rotary encoder
+- uses PSRAM for breathing room and for remote screenshot/debugging tooling
 
-  The SuperMini handles:
+## Hardware
 
-  - Wi-Fi
-  - ESPHome runtime
-  - Home Assistant integration
-  - display driving
-  - encoder/button input
-  - backlight PWM
-  - OTA updates
-  - lightweight local web/debug endpoints
+### Main controller
+- **ESP32-S3 SuperMini**
 
-  ### Front panel hardware
-  - **AliExpress display + rotary encoder module**
-  - Link: https://www.aliexpress.com/item/1005009880904568.html
+The SuperMini handles:
 
-  This gives the project its front-facing hardware:
+- Wi-Fi
+- ESPHome runtime
+- Home Assistant integration
+- display driving
+- encoder/button input
+- backlight PWM
+- OTA updates
+- lightweight local web/debug endpoints
 
-  - color TFT display
-  - rotary encoder
-  - button input hardware
-  - a compact physical form factor that works nicely for a wall/control-node style device
+### Front panel hardware
+- **AliExpress display + rotary encoder module**
+- Link: https://www.aliexpress.com/item/1005009880904568.html
 
-  In software, the display is driven as an **ST7789V 240x320 SPI panel**.
+This gives the project its front-facing hardware:
 
-  ### Custom motherboard
-  I didn’t start with a PCB. I built a simple motherboard on **perfboard**.
+- color TFT display
+- rotary encoder
+- button input hardware
+- a compact physical form factor that works nicely for a wall/control-node style device
 
-  The layout is straightforward:
+In software, the display is driven as an **ST7789V 240x320 SPI panel**.
 
-  - female **2.54mm headers** on one side for the display/encoder assembly
-  - female **2.54mm headers** on the reverse for the ESP32-S3 SuperMini
-  - point-to-point wiring between them on the perfboard
+### Custom motherboard
+I didn’t start with a PCB. I built a simple motherboard on **perfboard**.
 
-  That made it easy to prototype and swap parts without locking myself into a PCB layout too early.
+The layout is straightforward:
 
-  ### Mechanical compromise
-  The downside is that the cable routing and soldering are a bit ugly.
+- female **2.54mm headers** on one side for the display/encoder assembly
+- female **2.54mm headers** on the reverse for the ESP32-S3 SuperMini
+- point-to-point wiring between them on the perfboard
 
-  Right now, the USB cable exits in a way I’m not especially proud of. It sticks out the top because of how I routed everything during assembly. It works, but it’s
-  visibly a prototype.
+That made it easy to prototype and swap parts without locking myself into a PCB layout too early.
 
-  This is easy enough to improve:
+### Mechanical compromise
+The downside is that the cable routing and soldering are a bit ugly.
 
-  - use a **90-degree USB cable**
-  - or fix it properly in **v2** with a custom PCB / revised layout
+Right now, the USB cable exits in a way I’m not especially proud of. It sticks out the top because of how I routed everything during assembly. It works, but it’s
+visibly a prototype.
 
-  So the current build is functional and solid electrically, but very much “prototype hardware that escaped into production.”
+This is easy enough to improve:
 
-  ## What the device does
+- use a **90-degree USB cable**
+- or fix it properly in **v2** with a custom PCB / revised layout
 
-  The node has two main modes:
+So the current build is functional and solid electrically, but very much “prototype hardware that escaped into production.”
 
-  ### 1. Clock / idle page
-  When idle, the device shows:
+## What the device does
 
-  - current time
-  - current date
-  - night/day brightness behavior
-  - a visual indication when someone is outside
+The node has two main modes:
 
-  This makes it useful all the time, not just when motion is detected.
+### 1. Clock / idle page
+When idle, the device shows:
 
-  ### 2. Camera page
-  When the user interacts with it, or when Home Assistant reports outside activity, it switches to a full-screen camera page.
+- current time
+- current date
+- night/day brightness behavior
+- a visual indication when someone is outside
 
-  That page:
+This makes it useful all the time, not just when motion is detected.
 
-  - loads a fresh image for the selected camera
-  - shows a front/back selector overlay
-  - shows a timestamp
-  - allows manual refresh
-  - times out back to the clock page after inactivity
+### 2. Camera page
+When the user interacts with it, or when Home Assistant reports outside activity, it switches to a full-screen camera page.
 
-  ## Home Assistant’s role
+That page:
 
-  Home Assistant is an important part of the design. It is not just “nice to have.”
+- loads a fresh image for the selected camera
+- shows a front/back selector overlay
+- shows a timestamp
+- allows manual refresh
+- times out back to the clock page after inactivity
 
-  The ESP node uses Home Assistant for:
+## Home Assistant’s role
 
-  - **time sync**
-  - **presence/motion/person detection state**
-  - event-driven behavior
+Home Assistant is an important part of the design. It is not just “nice to have.”
 
-  In my setup, the relevant signal is a Home Assistant binary sensor for the front camera area.
+The ESP node uses Home Assistant for:
 
-  When that sensor fires:
+- **time sync**
+- **presence/motion/person detection state**
+- event-driven behavior
 
-  - the device switches to the camera page
-  - the front camera becomes selected
-  - the backlight goes bright
-  - a fresh image is fetched
+In my setup, the relevant signal is a Home Assistant binary sensor for the front camera area.
 
-  On the idle clock page, the device also indicates when someone is outside.
+When that sensor fires:
 
-  So Home Assistant is effectively acting as the event/router layer that turns camera analytics or motion detection into something meaningful for the physical device.
+- the device switches to the camera page
+- the front camera becomes selected
+- the backlight goes bright
+- a fresh image is fetched
 
-  That is an important design choice: I’m not trying to make the ESP32-S3 do identity, object detection, or camera analytics locally. Home Assistant is the orchestrator.
+On the idle clock page, the device also indicates when someone is outside.
 
-  ## Why this is not a “viewer” running on the screen module
+So Home Assistant is effectively acting as the event/router layer that turns camera analytics or motion detection into something meaningful for the physical device.
 
-  One thing worth being precise about: the project is not based on a self-contained “screen board” that already does everything.
+That is an important design choice: I’m not trying to make the ESP32-S3 do identity, object detection, or camera analytics locally. Home Assistant is the orchestrator.
 
-  The actual architecture is:
+## Why this is not a “viewer” running on the screen module
 
-  - **display + encoder module** for the front-end hardware
-  - **ESP32-S3 SuperMini** as the controller
-  - **perfboard motherboard** as the interconnect
-  - **Linux server** for image preparation
-  - **Home Assistant** for event/state logic
+One thing worth being precise about: the project is not based on a self-contained “screen board” that already does everything.
 
-  The ESP32-S3 is the compute node here. The display assembly is just the human interface hardware.
+The actual architecture is:
 
-  ## Why PSRAM matters
+- **display + encoder module** for the front-end hardware
+- **ESP32-S3 SuperMini** as the controller
+- **perfboard motherboard** as the interconnect
+- **Linux server** for image preparation
+- **Home Assistant** for event/state logic
 
-  PSRAM is one of the reasons this works comfortably.
+The ESP32-S3 is the compute node here. The display assembly is just the human interface hardware.
 
-  In the ESPHome config, I explicitly enable it:
+## Why PSRAM matters
 
-  ```yaml
-  psram:
-    mode: quad
-    speed: 40MHz ...
-  ```
+PSRAM is one of the reasons this works comfortably.
 
-  That helps in a few places:
+In the ESPHome config, I explicitly enable it:
 
-  - general memory headroom for a display-heavy ESPHome node
-  - image handling
-  - remote screenshot/debugging support
-  - avoiding the feeling that every feature is one allocation away from crashing the device
+```yaml
+psram:
+  mode: quad
+  speed: 40MHz ...
+```
 
-  ### Screenshot/debugging component
+That helps in a few places:
 
-  I use a custom ESPHome external component that adds an HTTP screenshot endpoint to the device.
+- general memory headroom for a display-heavy ESPHome node
+- image handling
+- remote screenshot/debugging support
+- avoiding the feeling that every feature is one allocation away from crashing the device
 
-  That component captures the current display framebuffer and serves it as a BMP over HTTP. It’s extremely useful for:
+### Screenshot/debugging component
 
-  - remote UI iteration
-  - documentation
-  - debugging deployed hardware
-  - checking exactly what the screen is rendering without physically walking over to it
+I use a custom ESPHome external component that adds an HTTP screenshot endpoint to the device.
 
-  That workflow is much more pleasant when the S3 has PSRAM available.
+That component captures the current display framebuffer and serves it as a BMP over HTTP. It’s extremely useful for:
 
-  So PSRAM here is not marketing fluff. It is directly useful.
+- remote UI iteration
+- documentation
+- debugging deployed hardware
+- checking exactly what the screen is rendering without physically walking over to it
 
-  ## Why the Linux server exists
+That workflow is much more pleasant when the S3 has PSRAM available.
 
-  A big design decision in this project was: do not make the ESP handle the camera pipeline.
+So PSRAM here is not marketing fluff. It is directly useful.
 
-  Instead of asking the ESP32-S3 to:
+## Why the Linux server exists
 
-  - consume camera streams directly
-  - decode heavy media formats
-  - resize images
-  - crop them to fit the display
-  - convert them into something display-friendly
+A big design decision in this project was: do not make the ESP handle the camera pipeline.
 
-  I offload that to a Linux server on the network.
+Instead of asking the ESP32-S3 to:
 
-  The Linux server exposes stable endpoints like:
+- consume camera streams directly
+- decode heavy media formats
+- resize images
+- crop them to fit the display
+- convert them into something display-friendly
 
-  http://<linux-server>:5051/image/front_fluent?width=240&height=320&format=png&fit=cover
-  http://<linux-server>:5051/image/garden_fluent?width=240&height=320&format=png&fit=cover
+I offload that to a Linux server on the network.
 
-  That means the server does the expensive work:
+The Linux server exposes stable endpoints like:
 
-  - reach the upstream camera source
-  - prepare the image
-  - resize to the target screen
-  - crop for portrait fit
-  - convert to PNG
-  - expose a simple URL for the ESP
+http://<linux-server>:5051/image/front_fluent?width=240&height=320&format=png&fit=cover
+http://<linux-server>:5051/image/garden_fluent?width=240&height=320&format=png&fit=cover
 
-  Then the ESP just downloads exactly the image it needs.
+That means the server does the expensive work:
 
-  This is a much more practical split of responsibilities.
+- reach the upstream camera source
+- prepare the image
+- resize to the target screen
+- crop for portrait fit
+- convert to PNG
+- expose a simple URL for the ESP
 
-  ## Why this architecture works well
+Then the ESP just downloads exactly the image it needs.
 
-  This split has a few major advantages.
+This is a much more practical split of responsibilities.
 
-  ### Linux server does the heavy lifting
+## Why this architecture works well
 
-  The Linux box is much better suited for:
+This split has a few major advantages.
 
-  - camera ingestion
-  - image transforms
-  - future caching
-  - API normalization
-  - integrating with upstream camera systems
+### Linux server does the heavy lifting
 
-  ### Home Assistant handles automation and context
+The Linux box is much better suited for:
 
-  Home Assistant is where I already have:
+- camera ingestion
+- image transforms
+- future caching
+- API normalization
+- integrating with upstream camera systems
 
-  - motion/person events
-  - schedules
-  - time
-  - presence logic
-  - automation flows
+### Home Assistant handles automation and context
 
-  So it makes sense to let HA drive the “when should the node wake/show camera” behavior.
+Home Assistant is where I already have:
 
-  ### ESP32-S3 handles local interaction
+- motion/person events
+- schedules
+- time
+- presence logic
+- automation flows
 
-  The ESP is then left to do the embedded-friendly part:
+So it makes sense to let HA drive the “when should the node wake/show camera” behavior.
 
-  - show a good UI
-  - react quickly to local controls
-  - fetch pre-rendered images
-  - expose basic web/debug endpoints
-  - stay reliable
+### ESP32-S3 handles local interaction
 
-  That is a much better fit than trying to make the microcontroller become a full media endpoint.
+The ESP is then left to do the embedded-friendly part:
 
-  ## User interaction
+- show a good UI
+- react quickly to local controls
+- fetch pre-rendered images
+- expose basic web/debug endpoints
+- stay reliable
 
-  The physical interaction is intentionally simple.
+That is a much better fit than trying to make the microcontroller become a full media endpoint.
 
-  ### Navigation button
+## User interaction
 
-  Used to move between the idle page and the camera page.
+The physical interaction is intentionally simple.
 
-  ### Rotary encoder
+### Navigation button
 
-  Used to switch between:
+Used to move between the idle page and the camera page.
 
-  - front camera
-  - back/garden camera
+### Rotary encoder
 
-  ### Encoder push
+Used to switch between:
 
-  Used to refresh the selected camera image.
+- front camera
+- back/garden camera
 
-  That gives the device a clean appliance-like behavior instead of turning it into a menu-heavy gadget.
+### Encoder push
 
-  ## Visual behavior
+Used to refresh the selected camera image.
 
-  ### Idle mode
+That gives the device a clean appliance-like behavior instead of turning it into a menu-heavy gadget.
 
-  - black background
-  - large clock
-  - date
-  - dimmer night mode
-  - outside/person indication from Home Assistant
+## Visual behavior
 
-  ### Camera mode
+### Idle mode
 
-  - full-screen portrait snapshot
-  - selector overlay for front/back
-  - timestamp overlay
-  - loading state while fetching
+- black background
+- large clock
+- date
+- dimmer night mode
+- outside/person indication from Home Assistant
 
-  It is intentionally minimal and readable.
+### Camera mode
 
-  ## The prototype hardware story
+- full-screen portrait snapshot
+- selector overlay for front/back
+- timestamp overlay
+- loading state while fetching
 
-  This is not a polished enclosure-first build.
+It is intentionally minimal and readable.
 
-  It started as:
+## The prototype hardware story
 
-  - a SuperMini
-  - a display/encoder module
-  - perfboard
-  - headers
-  - soldered routing
+This is not a polished enclosure-first build.
 
-  That was deliberate.
+It started as:
 
-  I wanted to validate:
+- a SuperMini
+- a display/encoder module
+- perfboard
+- headers
+- soldered routing
 
-  - the UI
-  - the HA flow
-  - the camera snapshot flow
-  - the ergonomics of the encoder
-  - whether the concept was actually useful day to day
+That was deliberate.
 
-  before investing time in a proper PCB.
+I wanted to validate:
 
-  The answer is yes, it’s useful, which means the ugly parts are now worth cleaning up in v2.
+- the UI
+- the HA flow
+- the camera snapshot flow
+- the ergonomics of the encoder
+- whether the concept was actually useful day to day
 
-  ## Version 2 ideas
+before investing time in a proper PCB.
 
-  The obvious next steps are:
+The answer is yes, it’s useful, which means the ugly parts are now worth cleaning up in v2.
 
-  - design a proper PCB instead of perfboard
-  - fix USB cable orientation properly
-  - improve enclosure/cable exit
-  - tighten the mounting arrangement
-  - maybe expose cleaner expansion points
-  - refine the front-panel mechanical fit
+## Version 2 ideas
 
-  But the current prototype already proves the architecture.
+The obvious next steps are:
 
-  ## Why this project has held up
+- design a proper PCB instead of perfboard
+- fix USB cable orientation properly
+- improve enclosure/cable exit
+- tighten the mounting arrangement
+- maybe expose cleaner expansion points
+- refine the front-panel mechanical fit
 
-  A lot of small ESP display projects are fun for a week and then stop being useful.
+But the current prototype already proves the architecture.
 
-  This one has held up better because it does a specific job well:
+## Why this project has held up
 
-  - always-visible clock/status node
-  - event-driven camera jump on outside motion/person detection
-  - local physical control
-  - remote screenshot/debugging
-  - sensible separation between ESP, HA, and Linux server responsibilities
+A lot of small ESP display projects are fun for a week and then stop being useful.
+
+This one has held up better because it does a specific job well:
+
+- always-visible clock/status node
+- event-driven camera jump on outside motion/person detection
+- local physical control
+- remote screenshot/debugging
+- sensible separation between ESP, HA, and Linux server responsibilities
 
