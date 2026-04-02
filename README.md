@@ -10,9 +10,9 @@
 ### Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
 <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7200.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7196.jpeg" width="400" alt="Camera Mode">
 
-<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7189.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7188.jpeg" width="400" alt="Camera Mode">
+<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7089.jpeg" width="400" alt="Clock Mode"><img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7189.jpeg" width="400" alt="Clock Mode"> 
 
-<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7190.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7192.jpeg" width="400" alt="Camera Mode">
+<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7188.jpeg" width="400" alt="Camera Mode"><img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7192.jpeg" width="400" alt="Camera Mode">
 
 ### TL;DR
 
