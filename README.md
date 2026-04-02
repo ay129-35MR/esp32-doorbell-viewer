@@ -1,4 +1,4 @@
-# ESP32-S3 Doorbell Viewer
+# ESP32-S3 Supermini Doorbell Viewer
 
 [![ESPHome](https://img.shields.io/badge/ESPHome-2025-blue?logo=esphome)](https://esphome.io/)  
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Integration-41BDF5?logo=home-assistant)](https://www.home-assistant.io/)  
