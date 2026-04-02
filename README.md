@@ -8,11 +8,11 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate?business=nyashachipanga%40yahoo.com&currency_code=GBP)
 
 ### Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
-<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7200.jpeg" width="400" alt="Clock Mode">
-![Camera Mode](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7196.jpeg)
-![build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7188.jpeg)
-![Build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7189.jpeg)
-![Family](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7190.jpeg)
+<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7200.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7196.jpeg" width="400" alt="Camera Mode">
+
+<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7189.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7188.jpeg" width="400" alt="Camera Mode">
+
+<img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7190.jpeg" width="400" alt="Clock Mode"> <img src="https://raw.githubusercontent.com/ay129-35MR/esp32-doorbell-viewer/main/IMG_7192.jpeg" width="400" alt="Camera Mode">
 
 ### TL;DR
 
