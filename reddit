@@ -1,0 +1,50 @@
+  I’ve been building a small doorbell/camera node around an ESP32-S3 SuperMini, an AliExpress 2.0 TFTF display + rotary encoder assembly (https://www.aliexpress.com/item/1005009900513827.html), and a very scrappy custom
+  motherboard made from perfboard, 2mm copper tubing, solder wires and elbow grease.
+
+  The screen and encoder are good fun to use and are the basis of my Tado hot water controller https://github.com/ay129-35MR/tadoHotWaterKnob
+  
+  Very similar build here - but with a custom stand made from 2mm copper tubing from a hobby store.   I have bent the tube into a stand and mounted the display at the angle using its mounting holes. 
+  I built a little carrier board on perfboard with female 2.54mm headers so the display/encoder assembly plugs into one side and the ESP32-S3 SuperMini plugs into the reverse. It works well, but the cable routing and
+  soldering are not exactly elegant, so right now there’s an ugly USB cable sticking out the top. That’s fixable with a 90-degree USB lead, or just a cleaner PCB in v2.
+
+  The software side is ESPHome, and the basic idea is:
+  - the ESP32-S3 handles Wi-Fi, UI, buttons/encoder, backlight PWM, and the display
+  - Home Assistant provides the time and the presence/motion signal
+  - a Linux server prepares camera snapshots for the ESP to fetch, but only because i have an existing project that uses it, you could get HA to get camera snasphots and send them over http to anywhere, but ymmv
+  - the device acts as a little always-on clock/status node that jumps into camera mode when something happens outside
+
+  It has two main states:
+  - idle clock page
+  - camera page
+
+  On the clock page it shows time/date, dims itself at night, and indicates when someone is outside. In my setup that signal comes from Home Assistant via a
+  binary_sensor.front_person, so HA is the thing tying together motion/person detection and the little physical device on the wall.
+
+  When motion/person detection fires, the device wakes into the camera page, switches to the front camera, bumps brightness up, and fetches a fresh snapshot. The rotary
+  encoder lets me switch between front and back/garden cameras, and the push button refreshes the image manually.
+
+  One of the main reasons the ESP32-S3 works nicely here is PSRAM. That extra memory headroom matters because this is more display-heavy than it first sounds. I’m also using a custom screenshot component that captures the live
+  framebuffer and serves it over HTTP as a BMP so I can debug the UI remotely. That kind of thing gets much more comfortable once you’ve got PSRAM available.
+
+  The camera side is deliberately not done on the ESP itself. Instead of trying to make the microcontroller deal with full camera streams, resizing, cropping, and format
+  conversion (from high resolution cctv cameras, much higher than the target display), I let my Linux server do that and expose simple image endpoints like:
+
+  http://<linux-server-ip>:5051/image/front_fluent?width=240&height=320&format=png&fit=cover
+  http://<linux-server-ip>:5051/image/garden_fluent?width=240&height=320&format=png&fit=cover
+
+  So the server does the image prep, and the ESP just downloads a portrait PNG that already matches the screen.
+
+  That split has worked out really well:
+  - Home Assistant handles event logic and presence state
+  - Linux server handles camera/image processing
+  - ESP32-S3 handles image rendering and the rotary knob and button the physical interface
+
+  Hardware-wise, the ESP32-S3 is using:
+  - Wi-Fi
+  - PSRAM
+  - SPI for the ST7789 display
+  - GPIOs for the encoder and buttons
+  - LEDC PWM for the backlight
+
+github post here:  https://github.com/ay129-35MR/esp32-doorbell-viewer
+
