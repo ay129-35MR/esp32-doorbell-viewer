@@ -8,8 +8,11 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate?business=nyashachipanga%40yahoo.com&currency_code=GBP)
 
 ## Using an ESP32-S3 SuperMini, an AliExpress display + encoder module, Home Assistant, PSRAM, and a Linux image server
-
-
+![Clock Mode](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7200.jpeg)
+![Camera Mode](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7196.jpeg)
+![build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7188.jpeg)
+![Build](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7189.jpeg)
+![Family](https://github.com/ay129-35MR/esp32-doorbell-viewer/blob/main/IMG_7190.jpeg)
 
 ## TL;DR
 
