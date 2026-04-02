@@ -152,7 +152,7 @@
   psram:
     mode: quad
     speed: 40MHz ...
-  ---
+  ```
 
   That helps in a few places:
 
